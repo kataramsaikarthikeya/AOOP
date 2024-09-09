@@ -2,91 +2,112 @@ package lab6b;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
 public class ToDoListApp {
-	private static List<String> toDoList = new ArrayList<>();
-    private static Scanner scanner = new Scanner(System.in);
+	// Define a Task class to represent each task
+    static class Task {
+        String description;
+
+        Task(String description) {
+            this.description = description;
+        }
+
+        @Override
+        public String toString() {
+            return description;
+        }
+    }
+
+    // List to store tasks
+    private List<Task> tasks = new ArrayList<>();
+
+    // Method to add a task
+    public void addTask(String description) {
+        tasks.add(new Task(description));
+        System.out.println("Task added: " + description);
+    }
+
+    // Method to update a task's description
+    public void updateTask(int index, String newDescription) {
+        if (index >= 0 && index < tasks.size()) {
+            tasks.get(index).description = newDescription;
+            System.out.println("Task updated at position " + index + " to: " + newDescription);
+        } else {
+            System.out.println("Invalid task position.");
+        }
+    }
+
+    // Method to remove a task by its index
+    public void removeTask(int index) {
+        if (index >= 0 && index < tasks.size()) {
+            Task removedTask = tasks.remove(index);
+            System.out.println("Task removed: " + removedTask);
+        } else {
+            System.out.println("Invalid task position.");
+        }
+    }
+
+    // Method to display all tasks
+    public void displayTasks() {
+        if (tasks.isEmpty()) {
+            System.out.println("No tasks to display.");
+        } else {
+            System.out.println("Tasks:");
+            for (int i = 0; i < tasks.size(); i++) {
+                System.out.println(i + ": " + tasks.get(i));
+            }
+        }
+    }
 
     public static void main(String[] args) {
+        ToDoListApp toDoList = new ToDoListApp();
+        Scanner scanner = new Scanner(System.in);
+
         while (true) {
             System.out.println("\nTo-Do List Application");
             System.out.println("1. Add Task");
             System.out.println("2. Update Task");
             System.out.println("3. Remove Task");
-            System.out.println("4. Display All Tasks");
+            System.out.println("4. Display Tasks");
             System.out.println("5. Exit");
             System.out.print("Choose an option: ");
+
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine(); // Consume the newline
 
             switch (choice) {
                 case 1:
-                    addTask();
+                    System.out.print("Enter task description: ");
+                    String description = scanner.nextLine();
+                    toDoList.addTask(description);
                     break;
                 case 2:
-                    updateTask();
+                    toDoList.displayTasks();
+                    System.out.print("Enter task position to update: ");
+                    int updateIndex = scanner.nextInt();
+                    scanner.nextLine(); // Consume the newline
+                    System.out.print("Enter new description: ");
+                    String newDescription = scanner.nextLine();
+                    toDoList.updateTask(updateIndex, newDescription);
                     break;
                 case 3:
-                    removeTask();
+                    toDoList.displayTasks();
+                    System.out.print("Enter task position to remove: ");
+                    int removeIndex = scanner.nextInt();
+                    scanner.nextLine(); // Consume the newline
+                    toDoList.removeTask(removeIndex);
                     break;
                 case 4:
-                    displayTasks();
+                    toDoList.displayTasks();
                     break;
                 case 5:
                     System.out.println("Exiting...");
+                    scanner.close();
                     return;
                 default:
-                    System.out.println("Invalid option. Please choose again.");
+                    System.out.println("Invalid option. Please try again.");
             }
         }
     }
-
-    private static void addTask() {
-        System.out.print("Enter the task description: ");
-        String task = scanner.nextLine();
-        toDoList.add(task);
-        System.out.println("Task added successfully.");
-    }
-
-    private static void updateTask() {
-        displayTasks();
-        System.out.print("Enter the task index to update (1-based index): ");
-        int index = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
-
-        if (index >= 1 && index <= toDoList.size()) {
-            System.out.print("Enter the new description: ");
-            String newDescription = scanner.nextLine();
-            toDoList.set(index - 1, newDescription);
-            System.out.println("Task updated successfully.");
-        } else {
-            System.out.println("Invalid task index.");
-        }
-    }
-
-    private static void removeTask() {
-        displayTasks();
-        System.out.print("Enter the task index to remove (1-based index): ");
-        int index = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
-
-        if (index >= 1 && index <= toDoList.size()) {
-            toDoList.remove(index - 1);
-            System.out.println("Task removed successfully.");
-        } else {
-            System.out.println("Invalid task index.");
-        }
-    }
-
-    private static void displayTasks() {
-        if (toDoList.isEmpty()) {
-            System.out.println("No tasks available.");
-        } else {
-            System.out.println("To-Do List:");
-            for (int i = 0; i < toDoList.size(); i++) {
-                System.out.println((i + 1) + ". " + toDoList.get(i));
-            }
-        }
-    }
-	
 
 }
